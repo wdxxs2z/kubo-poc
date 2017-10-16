@@ -2,13 +2,16 @@
 name: kubernetes-system-specs
 
 templates:
-  bin/post-deploy: bin/post-deploy
+  bin/post-deploy: bin/run
   bin/deploy-specs: bin/deploy-specs
+  kubeconfig/kubeconfig.erb: kubeconfig/kubeconfig
+  kubeconfig/ca.pem.erb: kubeconfig/ca.pem
   config/kubedns-svc.yml: config/kubedns-svc.yml
   config/kubedns-controller.yml: config/kubedns-controller.yml
   config/influxdb.yml: config/influxdb.yml
   config/heapster.yml.erb: config/heapster.yml
   config/kubernetes-dashboard.yml: config/kubernetes-dashboard.yml
+  config/grafana.yml: config/grafana.yml
 
 packages:
 - jq
@@ -18,3 +21,7 @@ properties:
   kubernetes-api-url:
     description: The full URL for the load balancer in front of the masters
     example: https://api.sys.kubo.cf-app.com:8443
+  kubelet-password:
+    description: The password for the kubelet user
+  tls.kubernetes:
+    description: "Certificate and private key for the Kubernetes master"

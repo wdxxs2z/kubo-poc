@@ -1,0 +1,6 @@
+# abort script on any command that exits with a non zero value
+set -e
+
+tar xzvf ${BOSH_COMPILE_TARGET}/storage/ceph.tar.gz
+
+cp -a ${BOSH_COMPILE_TARGET}/ceph ${BOSH_INSTALL_TARGET}

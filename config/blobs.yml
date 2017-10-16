@@ -6,6 +6,9 @@ cni/util-linux_2.27.1-6ubuntu3_amd64.deb:
   size: 847730
   object_id: 27eb3ec3-220f-4a25-6c4f-ec219c37ac8d
   sha: 568f62cb031608ab09ba1e3c2121e9e8b92dcae4
+container-images/appscode_voyager.tgz:
+  size: 73536512
+  sha: 78c602f8b56583c3089aeab05fced638fb10109e
 container-images/gcr.io_google_containers_heapster:v1.1.0.tgz:
   size: 32207205
   object_id: d2bef095-4048-4d56-5a5c-a5bd759b23fd
@@ -34,10 +37,16 @@ container-images/gcr.io_google_containers_pause.tgz:
   size: 71680
   object_id: 018df5e0-9afe-4f68-4552-c08a692a991e
   sha: 7b82730258d143602b85efa7ec2da5bc754f3a93
+container-images/heapster-grafana-amd64.tgz:
+  size: 134347264
+  sha: 429ca591dd3384248dcd3a3d535d52c001b4c637
 container-images/kubernetes_heapster_influxdb:v0.6.tgz:
   size: 105081408
   object_id: ede99e38-9127-45e3-65a5-6b572c881930
   sha: cc33af2580eead375bb1ebf5d2cacf6dc71477a8
+container-images/nginx-ingress-controller.tgz:
+  size: 123521536
+  sha: 64d0aa26560b745b733df3d11fcd49d26b8a5182
 etcdctl:
   size: 18427584
   object_id: 32221476-5c3d-4ec7-5869-44c989cc3077
@@ -60,27 +69,21 @@ jq-linux64-1.5:
   sha: d8e36831c3c94bb58be34dd544f44a6c6cb88568
 kubernetes-1.7.5/kube-apiserver:
   size: 184957234
-  object_id: 86416979-b6f9-4814-5df3-0a03a9a35a71
   sha: 4f8b787efe9b7960df8a4f2102a06d14197d0bd1
 kubernetes-1.7.5/kube-controller-manager:
   size: 136864624
-  object_id: 44c36d6e-4860-44c6-52f0-2d83344d2678
   sha: 70848788eb2944d677f78b92a6f6335c0252d1dd
 kubernetes-1.7.5/kube-proxy:
   size: 69695319
-  object_id: 3b35828f-6c74-42a5-435f-a49e9d61afd3
   sha: 77f3298a84f2e2a72a88f97b92fb2a7c02f0eb7a
 kubernetes-1.7.5/kube-scheduler:
   size: 76070829
-  object_id: f6f6ab34-6f26-4dc1-73a6-570d4526a2bf
   sha: 372dd4da1394357f6c293071f1301cbaac923eef
 kubernetes-1.7.5/kubectl:
   size: 72337373
-  object_id: c86ca4cf-dc05-4080-49de-f899634be162
   sha: bee713b4c1e024ffc9281440b3d19c1576e5932b
 kubernetes-1.7.5/kubelet:
   size: 146187448
-  object_id: a9bb936a-aa83-4854-7b11-9e396b799da3
   sha: 91ed0f6eb45971d56f8c26acb8dfa8e593282012
 socat-1.7.3.2.tar.gz:
   size: 615818

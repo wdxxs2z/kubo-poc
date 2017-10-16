@@ -82,7 +82,13 @@ func (e *endpoint) HTTP() ([]*route.HTTP, error) {
 				nodePort := route.Port(port.NodePort)
 				backends := getBackends(ips, nodePort)
 				routeName := service.ObjectMeta.Labels["http-route-sync"]
-				fullName := routeName + "." + e.cfDomain
+                                domainName := service.ObjectMeta.Labels["http-route-domain"]
+                                var fullName string
+                                if domainName != "" {
+                                  fullName = routeName + "." + domainName
+                                }else{
+                                  fullName = routeName + "." + e.cfDomain
+                          	}
 				http := &route.HTTP{Name: fullName, Backends: backends}
 				routes = append(routes, http)
 			}
@@ -110,9 +116,13 @@ func getIPs(clientset k8s.Interface) ([]string, error) {
 	}
 	ips := []string{}
 	for _, node := range nodes.Items {
-		for _, address := range node.Status.Addresses {
-			if address.Type == "InternalIP" {
-				ips = append(ips, address.Address)
+		for _, status := range node.Status.Conditions {
+			if status.Type == "Ready" {
+				for _, address := range node.Status.Addresses {
+					if address.Type == "InternalIP" {
+						ips = append(ips, address.Address)
+					}
+				}
 			}
 		}
 	}

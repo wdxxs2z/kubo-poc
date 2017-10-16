@@ -1,12 +1,9 @@
 #!/bin/bash
 
-set -exu -o pipefail
+set -x
 
-CONF_DIR=/var/vcap/jobs/kubelet/config
-PKG_DIR=/var/vcap/packages/kubernetes
-STORAGE_DIR=/var/vcap/packages/storage
+echo "setup storage packages..."
 
-install_storage_deb() {
 echo "Install python 2.7"
 dpkg -i /var/vcap/packages/storage/ceph/libpython2.7-minimal_2.7.6-8ubuntu0.2_amd64.deb
 dpkg -i /var/vcap/packages/storage/ceph/python2.7-minimal_2.7.6-8ubuntu0.2_amd64.deb
@@ -80,49 +77,5 @@ dpkg -i /var/vcap/packages/storage/ceph/ceph-mds_9.2.0-1trusty_amd64.deb
 dpkg -i /var/vcap/packages/storage/ceph/ca-certificates_20141019ubuntu0.14.04.1_all.deb
 dpkg -i /var/vcap/packages/storage/ceph/libcurl3-gnutls_7.35.0-1ubuntu2.6_amd64.deb
 dpkg -i /var/vcap/packages/storage/ceph/apt-transport-https_1.0.1ubuntu2.11_amd64.deb
+
 dpkg -i /var/vcap/packages/storage/ceph/uuid-runtime_2.20.1-5.1ubuntu20.7_amd64.deb
-}
-
-get_cloud_property() {
-  local property_name="${1}="
-  local prefix_length=$(echo "${property_name}" | wc -c | tr -d ' ')
-  grep "${property_name}" "${cloud_config}" | tr -d '"' | cut -c${prefix_length}-
-}
-
-detect_cloud_config() {
-  if [ -e /var/vcap/jobs/cloud-provider/bin/cloud-provider_utils ]; then
-    source /var/vcap/jobs/cloud-provider/bin/cloud-provider_utils
-    set_cloud_provider
-    cloud_config="/var/vcap/jobs/cloud-provider/config/cloud-provider.ini"
-  else
-    cloud_config=""
-    cloud_provider=""
-  fi
-}
-
-shutdown_rpcbind_if_its_running() {
-  /etc/init.d/rpcbind stop || echo Already stopped.
-}
-
-
-update_vsphere_vms() {
-   export GOVC_URL="$(get_cloud_property "server"):$(get_cloud_property "port")"
-   export GOVC_USERNAME="$(get_cloud_property "user")"
-   export GOVC_PASSWORD="$(get_cloud_property "password")"
-   export GOVC_INSECURE="$(get_cloud_property "insecure-flag")"
-   export GOVC_DATACENTER="$(get_cloud_property "datacenter")"
-   export GOVC_DATASTORE="$(get_cloud_property "datastore")"
-
-   /var/vcap/packages/govc/bin/govc vm.change -e 'disk.enableUUID=1' -vm.ip=<%= spec.ip %>
-}
-
-main() {
-  install_storage_deb
-  detect_cloud_config
-  shutdown_rpcbind_if_its_running
-  if [[ "vsphere" == "$cloud_provider" ]]; then
-       update_vsphere_vms
-  fi
-}
-
-main

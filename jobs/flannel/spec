@@ -10,7 +10,10 @@ packages:
 - flanneld
 - cni
 
-properties: {}
+properties:
+  etcd-lb-address:
+    description: "Etcd Loadbalance,if set consul or haproxy vip,please write your address in it."
+    example: "kubo-etcd.service.kubo.internal" 
 
 consumes:
 - name: etcd

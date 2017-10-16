@@ -3,7 +3,12 @@
 set -e
 
 spec_dir="/var/vcap/jobs/kubernetes-system-specs/config/"
-kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/kubeconfig/config/kubeconfig"
+kubectl="/var/vcap/packages/kubernetes/bin/kubectl --kubeconfig=/var/vcap/jobs/kubernetes-system-specs/kubeconfig/kubeconfig"
+
+delete() {
+  local spec_file="${spec_dir}/${1}"
+  ${kubectl} delete -f "${spec_file}"
+}
 
 apply_spec() {
   local spec_file="${spec_dir}/${1}"
@@ -28,6 +33,9 @@ main() {
 
   apply_spec "kubernetes-dashboard.yml"
   wait_for kubernetes-dashboard
+
+  apply_spec "grafana.yml"
+  wait_for monitoring-grafana
 }
 
 main

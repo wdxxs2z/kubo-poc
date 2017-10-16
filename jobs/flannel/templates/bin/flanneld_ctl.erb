@@ -26,9 +26,16 @@ send_process_stderr_to_logfile() {
 
 start_flanneld() {
   <%
-    etcd_endpoints = link("etcd").instances.map do |instance|
-      "http://#{instance.address}:4001/"
-    end.join(',')
+    require 'json'
+
+    etcd_endpoints = nil
+    if_p('etcd-lb-address') do |etcd_lb_address|
+      etcd_endpoints="http://#{etcd_lb_address}:4001"
+    end.else do
+      etcd_endpoints = link("etcd").instances.map do |instance|
+        "http://#{instance.address}:4001"
+      end.join(',')
+    end
   %>
 
   mkdir -p /dev/net

@@ -35,10 +35,18 @@ send_process_stderr_to_logfile() {
 
 start_kubernetes_api_server() {
 <%
+require 'json'
+
+etcd_endpoints = nil
+if_p('etcd-lb-address') do |etcd_lb_address|
+  etcd_endpoints="http://#{etcd_lb_address}:4001"
+end.else do
   etcd_endpoints = link("etcd").instances.map do |instance|
     "http://#{instance.address}:4001"
   end.join(',')
-  api_server_count = link("kubernetes-api").instances.size
+end
+  
+api_server_count = link("kubernetes-api").instances.size
 %>
 
   exec chpst -u vcap:vcap  \
@@ -46,7 +54,7 @@ start_kubernetes_api_server() {
       --admission-control=NamespaceLifecycle,NamespaceExists,ServiceAccount,LimitRanger,ResourceQuota \
       --allow-privileged=true \
       --apiserver-count=<%= api_server_count %> \
-      --authorization-mode=ABAC \
+      --authorization-mode=ABAC,RBAC \
       --authorization-policy-file=/var/vcap/jobs/kubernetes-api/config/authorization_policy.jsonl \
       --bind-address=0.0.0.0 \
       --cert-dir=/var/vcap/sys/run/kubernetes/ \
@@ -56,6 +64,19 @@ start_kubernetes_api_server() {
       --etcd-servers=<%= etcd_endpoints %> \
       --insecure-bind-address=127.0.0.1 \
       --kubelet-https=true \
+      <% if_p("oidc-issuer-url", "oidc-client-id") do |oidc_issuer_url, oidc_client_id| %> \
+      --oidc-issuer-url="<%= oidc_issuer_url %>" \
+      --oidc-client-id="<%= oidc_client_id %>" \
+      <% if_p("oidc-username-claim") do |oidc_username_claim| %> \
+      --oidc-username-claim="<%= oidc_username_claim %>" \
+      <% end %> \
+      <% if_p("oidc-groups-claim") do |oidc_groups_claim| %> \
+      --oidc-groups-claim="<%= oidc_groups_claim %>" \
+      <% end %> \
+      <% if_p("oidc-ca") do %> \
+      --oidc-ca-file="/var/vcap/jobs/kubernetes-api/config/oidc-ca.pem" \
+      <% end %> \
+      <% end %> \
       --secure-port=8443 \
       --service-account-key-file=/var/vcap/jobs/kubernetes-api/config/kubernetes-key.pem \
       --service-account-lookup \
@@ -65,6 +86,10 @@ start_kubernetes_api_server() {
       --tls-private-key-file=/var/vcap/jobs/kubernetes-api/config/kubernetes-key.pem \
       --token-auth-file=/var/vcap/jobs/kubernetes-api/config/tokens.csv \
       --storage-media-type=application/json \
+      --audit-log-maxage=30 \
+      --audit-log-maxbackup=3 \
+      --audit-log-maxsize=100 \
+      --audit-log-path=$LOG_DIR/audit.log \
       --v=2 \
     1>> $LOG_DIR/kubernetes_api.stdout.log \
     2>> $LOG_DIR/kubernetes_api.stderr.log
