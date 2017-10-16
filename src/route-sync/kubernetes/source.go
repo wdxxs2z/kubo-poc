@@ -117,7 +117,7 @@ func getIPs(clientset k8s.Interface) ([]string, error) {
 	ips := []string{}
 	for _, node := range nodes.Items {
 		for _, status := range node.Status.Conditions {
-			if status.Type == "Ready" {
+			if status.Type == "Ready" && status.Status == "True" {
 				for _, address := range node.Status.Addresses {
 					if address.Type == "InternalIP" {
 						ips = append(ips, address.Address)
