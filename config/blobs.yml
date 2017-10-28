@@ -85,6 +85,24 @@ kubernetes-1.7.5/kubectl:
 kubernetes-1.7.5/kubelet:
   size: 146187448
   sha: 91ed0f6eb45971d56f8c26acb8dfa8e593282012
+kubernetes-1.8.2/kube-apiserver:
+  size: 192911011
+  sha: 13a3abac90f5f06d02d6ee06fe0f1052ee4f3dba
+kubernetes-1.8.2/kube-controller-manager:
+  size: 128086608
+  sha: b7e9eef818acde6745a84278cad906cae06201a3
+kubernetes-1.8.2/kube-proxy:
+  size: 47861443
+  sha: ec845b88b375ae79c94011f9b9ff58d6822f0699
+kubernetes-1.8.2/kube-scheduler:
+  size: 53774121
+  sha: 76f6d2983fea987809213d22d9cc529f6ac55ae4
+kubernetes-1.8.2/kubectl:
+  size: 52269537
+  sha: 20f145a084a7afc80569f5852cc1bcd377e0e562
+kubernetes-1.8.2/kubelet:
+  size: 137501952
+  sha: 2f6ec469e61125a837ad447cab012600ef08f0b2
 socat-1.7.3.2.tar.gz:
   size: 615818
   object_id: a6f3dcb3-54a0-44a3-4100-f408932aaf8f

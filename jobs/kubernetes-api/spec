@@ -9,6 +9,7 @@ templates:
   config/kubernetes-key.pem.erb: config/kubernetes-key.pem
   config/oidc-ca.pem.erb: config/oidc-ca.pem
   bin/pre-start: bin/pre-start
+  bin/dns_health_check.erb: bin/dns_health_check
 
 packages:
 - pid_utils
@@ -30,6 +31,9 @@ properties:
   port:
     example: 81
     default: 1235
+  authorization-mode:
+    description: The authorization mode for kubernetes-api. Should be 'abac' or 'rbac'
+    default: abac
   oidc-issuer-url:
     description: "URL of the provider which allows the API server to discover public signing keys"
   oidc-client-id:
